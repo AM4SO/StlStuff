@@ -1,0 +1,86 @@
+solid "testthingydelete"
+  facet normal -0 1 0
+    outer loop
+      vertex 0 0 0
+      vertex 50 0 0
+      vertex 0 50 -3.06161689323e-15
+    endloop
+  endfacet
+  facet normal 0 1 0
+    outer loop
+      vertex 50 0 0
+      vertex 50 50 -3.06161689323e-15
+      vertex 0 50 -3.06161689323e-15
+    endloop
+  endfacet
+  facet normal -0 1 0
+    outer loop
+      vertex 0 3.06161689323e-15 50
+      vertex 50 3.06161689323e-15 50
+      vertex 0 50 50
+    endloop
+  endfacet
+  facet normal 0 1 0
+    outer loop
+      vertex 50 3.06161689323e-15 50
+      vertex 50 50 50
+      vertex 0 50 50
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex 0 0 0
+      vertex 0 3.06161689323e-15 50
+      vertex 0 50 -3.06161689323e-15
+    endloop
+  endfacet
+  facet normal -1 0 -0
+    outer loop
+      vertex 0 3.06161689323e-15 50
+      vertex 0 50 50
+      vertex 0 50 -3.06161689323e-15
+    endloop
+  endfacet
+  facet normal -1 0 -0
+    outer loop
+      vertex 50 3.06161689323e-15 50
+      vertex 50 50 50
+      vertex 50 50 -3.06161689323e-15
+    endloop
+  endfacet
+  facet normal -1 0 0
+    outer loop
+      vertex 50 0 0
+      vertex 50 3.06161689323e-15 50
+      vertex 50 50 -3.06161689323e-15
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex 0 0 0
+      vertex 0 3.06161689323e-15 50
+      vertex 50 0 0
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex 0 3.06161689323e-15 50
+      vertex 50 3.06161689323e-15 50
+      vertex 50 0 0
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex 0 50 -3.06161689323e-15
+      vertex 0 50 50
+      vertex 50 50 -3.06161689323e-15
+    endloop
+  endfacet
+  facet normal 0 0 -1
+    outer loop
+      vertex 0 50 50
+      vertex 50 50 50
+      vertex 50 50 -3.06161689323e-15
+    endloop
+  endfacet
+endsolid "testthingydelete"

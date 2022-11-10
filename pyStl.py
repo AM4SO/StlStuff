@@ -134,6 +134,8 @@ class Vector:
         return Vector(abs(self.x),abs(self.y),abs(self.z))
     def __neg__(self):
         return Vector.zero - self
+    def __eq__(self, other):
+        return self.x = other.x and self.y == other.y and self.z = other.z
 
 Vector.up = Vector(0,0,1)
 Vector.right = Vector(1,0,0)

@@ -135,9 +135,13 @@ class Vector:
     def __neg__(self):
         return Vector.zero - self
     def __eq__(self, other):
-        return self.x = other.x and self.y == other.y and self.z = other.z
-
+        return self.x == other.x and self.y == other.y and self.z == other.z
+    def maxPerAxis(self, other):
+        return Vector(max(self.x, other.x), max(self.y,other.y), max(self.z, other.z))
+    def minPerAxis(self, other):
+        return Vector(min(self.x, other.x), min(self.y,other.y), min(self.z, other.z))
 Vector.up = Vector(0,0,1)
 Vector.right = Vector(1,0,0)
 Vector.back = Vector(0,1,0)
 Vector.zero = Vector(0,0,0)
+Vector.ones = Vector(1,1,1)

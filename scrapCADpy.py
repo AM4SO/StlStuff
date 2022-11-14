@@ -33,7 +33,15 @@ class Block:
         
         left = Face(-Vector.right, blockPos=position)
 
+def print3d(arr):
+    for i in range(len(arr)):
+        for j in range(len(arr[i])):
+            print(arr[i][j])
+        print("")
+
 class Blueprint:
+    blueprintObj = None
+    solid, name = None, None
     def __init__(self, blueprint):
         self.rawBlueprint = blueprint
         self.simplifyRawBlueprint()
@@ -44,8 +52,38 @@ class Blueprint:
             for j in range(self.size[1]):
                 self.blockArray[i].append([])
                 for k in range(self.size[2]):
-                    self.blockArray[i][j].append("")
+                    self.blockArray[i][j].append("0")
         print("Initialised blueprint thingy")
+        for part in self.blueprintObj:
+            position = part["pos"] - self.minPos
+            bounds = Vector(1,1,1)
+            if part["bounds"]:
+                bounds = part["bounds"]
+            endPos = position + bounds - Vector.ones
+            for x in range(bounds.x):
+                for y in range(bounds.y):
+                    for z in range(bounds.z):
+                        self.blockArray[position.x+x][position.y+y][position.z+z] = "1"#part["shapeId"]
+        print3d(self.blockArray)
+        self.createModel()
+    
+    def createModel(self):
+        self.solid = Solid(self.name)
+        blockArray = self.blockArray
+        for x in range(len(blockArray)):
+            for y in range(len(blockArray[x])):
+                for z in range(len(blockArray[x][y])):
+                    block = blockArray[x][y][z]
+                    if block == "0":
+                        continue
+                    l = x==0 or blockArray[x-1][y][z] == "0"
+                    r = x==len(blockArray)-1 or blockArray[x+1][y][z] == "0"
+                    d = z==0 or blockArray[x][y][z-1] == "0"
+                    u = z==len(blockArray)-1 or blockArray[x][y][z+1] == "0"
+                    f = y==0 or blockArray[x][y-1][z] == "0"
+                    b = y==len(blockArray)-1 or blockArray[x][y+1][z] == "0"
+                    solid.createCube(Vector(x,y,z),1, includelrdufb=(l,r,d,u,f,b))
+        
     def calcSize(self):
         blueprint = self.blueprintObj
         maxPos = Vector(-1000000000, -1000000000, -1000000000)

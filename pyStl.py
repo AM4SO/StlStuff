@@ -61,6 +61,8 @@ class Solid:
         self.scaley(scale)
         self.scalez(scale)
         return true
+    def createCube(self, position, size, includelrdufb=None):
+        
 
 class Triangle:
     def __init__(self, normal, v1,v2,v3, reverse=False):

@@ -75,6 +75,8 @@ class Blueprint:
             bounds = Vector(1,1,1)
             if part.get("bounds"):
                 bounds = part["bounds"]
+            else: ## Correct orientation: xaxis: 2, zaxis:1
+                position -= Vector.zero
             endPos = position + bounds - Vector.ones
             for x in range(bounds.x):
                 for y in range(bounds.y):

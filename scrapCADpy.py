@@ -42,8 +42,9 @@ def print3d(arr):
 class Blueprint:
     blueprintObj = None
     solid, name = None, None
-    def __init__(self, blueprint):
+    def __init__(self, blueprint, name):
         self.rawBlueprint = blueprint
+        self.name = name
         self.simplifyRawBlueprint()
         self.calcSize()
         self.blockArray = []
@@ -66,6 +67,7 @@ class Blueprint:
                         self.blockArray[position.x+x][position.y+y][position.z+z] = "1"#part["shapeId"]
         print3d(self.blockArray)
         self.createModel()
+        self.solid.save()
     
     def createModel(self):
         self.solid = Solid(self.name)
@@ -82,7 +84,7 @@ class Blueprint:
                     u = z==len(blockArray)-1 or blockArray[x][y][z+1] == "0"
                     f = y==0 or blockArray[x][y-1][z] == "0"
                     b = y==len(blockArray)-1 or blockArray[x][y+1][z] == "0"
-                    solid.createCube(Vector(x,y,z),1, includelrdufb=(l,r,d,u,f,b))
+                    self.solid.createCube(Vector(x,y,z),1, includelrdufb=(l,r,d,u,f,b))
         
     def calcSize(self):
         blueprint = self.blueprintObj
@@ -117,4 +119,4 @@ can have the center of the block stored in the correct location, and the rest of
 not need to be stored.
 '''
 x={"bodies":[{"childs":[{"bounds":{"x":4,"y":1,"z":4},"color":"9B683A","pos":{"x":-7,"y":8,"z":2},"shapeId":"df953d9c-234f-4ac2-af5e-f0490b223e71","xaxis":1,"zaxis":3},{"bounds":{"x":1,"y":3,"z":1},"color":"9B683A","pos":{"x":-5,"y":5,"z":3},"shapeId":"df953d9c-234f-4ac2-af5e-f0490b223e71","xaxis":1,"zaxis":3}]}],"version":4}
-x = Blueprint(x)
+x = Blueprint(x, "SomethingyThingTestThing")

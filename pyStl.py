@@ -62,7 +62,40 @@ class Solid:
         self.scalez(scale)
         return true
     def createCube(self, position, size, includelrdufb=None):
-        
+        if not includelrdufb:
+            includelrdufb = (True, True, True, True, True, True)
+        normals = (-Vector.right, Vector.right, -Vector.up, Vector.up, -Vector.back, Vector.back)
+        toAdd = (Vector.zero, Vector.right, Vector.zero, Vector.up, Vector.zero, Vector.back)
+        for i in range(len(normals)):
+            if includelrdufb[i]:
+                self.createRectByPosSizeNormal(position+toAdd[i], (size,size), normals[i])
+    def createRectByPosSizeNormal(self, pos, size, normal):
+        norm = normal.positive()
+        rightVec = Vector.right
+        upVec = Vector.up
+        rev = False
+        if norm == Vector.right:
+            rightVec = Vector.back
+            if normal == -Vector.right:
+                rev = True
+                #rightVec = -rightVec
+                #pos += Vector.back
+        elif normal == Vector.back:
+            rev=True
+            #rightVec = -rightVec
+            #pos += vector.right
+        elif norm == Vector.up:
+            upVec = Vector.back
+            if normal == -Vector.up:
+                rev = True
+                #upVec = -upVec
+                #pos += Vector.back
+        bl = pos
+        br = pos + rightVec*size[0]
+        tr =  br + upVec*size[1]
+        tl =  bl + upVec*size[1]
+        self.addTriangle(Vector.zero, bl,br,tl, reverse=rev)
+        self.addTriangle(Vector.zero, br, tr, tl, reverse=rev)
 
 class Triangle:
     def __init__(self, normal, v1,v2,v3, reverse=False):
@@ -105,6 +138,8 @@ class Vector:
         self.y = y
         self.z = z
     def __add__(self, other):
+        #if other == 0:
+        #    return Vector(self.x, self.y,self.z)
         return Vector(self.x+other[0], self.y+other[1], self.z+other[2])
     def __iadd__(self, other):
         return self + other

@@ -1,0 +1,7 @@
+{
+   "description" : "#{STEAM_WORKSHOP_NO_DESCRIPTION}",
+   "localId" : "8debd955-48fa-476d-83d9-fdb63e053ce5",
+   "name" : "16 bit adder",
+   "type" : "Blueprint",
+   "version" : 0
+}

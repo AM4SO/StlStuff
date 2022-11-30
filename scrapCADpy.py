@@ -72,14 +72,16 @@ class Blueprint:
         print("Initialised blueprint thingy")
         for part in self.blueprintObj:
             position = part["pos"] - self.minPos
-            bounds = Vector(1,1,1)
+             bounds = Vector(1,1,1)
             if part.get("bounds"):
                 bounds = part["bounds"]
             else: ## Correct orientation: xaxis: 2, zaxis:1
                 xaxis = part["xaxis"]
                 zaxis = part["zaxis"]
-                translate = Vector.zero
-                if not (xaxis == 2 and zaxis == 1):
+                part["bounds"] = Vector(1,1,1) # Assume cube for now
+                #translate = Vector.zero -- No translate: Use rotate
+                part["bounds"] = part["bounds"].rotatex(xaxis - 2).rotatez(zaxis - 1)
+                #if not (xaxis == 2 and zaxis == 1):
                     
             endPos = position + bounds - Vector.ones
                 position += translate
@@ -134,8 +136,6 @@ class Blueprint:
                 self.blueprintObj.append(part)
 
 m='''
-Each block is a node in a graph. --- No. Graphs will be slow when finding the correct location
-for a block.
 ------
 Calculate the dimentions of a 3d bounding box that is large enough to fit the whole object
 in it. This is a 3d array which holds the blocks in it. Blocks which are larger than 1x1

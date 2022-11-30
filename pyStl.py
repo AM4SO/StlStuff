@@ -177,6 +177,45 @@ class Vector:
         return Vector(max(self.x, other.x), max(self.y,other.y), max(self.z, other.z))
     def minPerAxis(self, other):
         return Vector(min(self.x, other.x), min(self.y,other.y), min(self.z, other.z))
+    def rotatex(self, amount):
+        if amount == 0:
+            return self + 0
+        test = '''
+        for bounds 2,3,4:
+        cross section when rotate around x:
+                     |
+                     |
+            __ __ __ |
+            __ __ __ |
+            __ __ __ /
+            __ __ __/  
+            Bounds = cross section = [3,4]
+            After each rotation:
+                1: [-4,3]
+                2: [-3,-4]
+            Transformation to make work:x  a b     ax + by
+                                        y  c d  =  cx + dy
+                                        
+                                        -4  0 -1     0 + -3     -3
+                                         3  1  0  = -4 + 0    = -4
+                                         
+                                        x  0 -1  0     ax + by + 0z    
+                                        y  1  0  0  =  cx + dy + 0z: Ztrans= [[0,-1,0][1,0,0],[0,0,1]]
+                                        z  0  0  1     0x + 0y +  z
+                                        
+                                        Xtrans = [[1,0,0],[0,0,-1],[0,1,0]]
+                                        x  1  0  0     x
+                                        y  0  0 -1  = -z
+                                        z  0  1  0     y
+        '''
+        ## Apply transformation [[0, -1], [1, 0]] %amount% times
+        
+    def rotatez(self, amount):
+
+class Matrix:
+    def __init__(self):
+        
+
 Vector.up = Vector(0,0,1)
 Vector.right = Vector(1,0,0)
 Vector.back = Vector(0,1,0)

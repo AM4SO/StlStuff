@@ -131,7 +131,7 @@ class Triangle:
             v.z *= scale
 class Vector:
     up,right,back,zero = None,None,None,None
-
+    
     x,y,z = None,None,None
     def __init__(self, x,y,z):
         self.x = x
@@ -204,16 +204,38 @@ class Vector:
                                         z  0  0  1     0x + 0y +  z
                                         
                                         Xtrans = [[1,0,0],[0,0,-1],[0,1,0]]
-                                        x  1  0  0     x
-                                        y  0  0 -1  = -z
-                                        z  0  1  0     y
+                                        x   1  0  0     x
+                                        y   0  0 -1  = -z
+                                        z   0  1  0     y
         '''
         ## Apply transformation [[0, -1], [1, 0]] %amount% times
+        transformationMat = Matrix((3,3), [[1,0,0],[0,0,-1],[0,1,0]])
         
     def rotatez(self, amount):
+    
+    def dot(self, other):
+        if isinstance(other, Matrix):
+            if other.shape[1]: ##numColumns
+                return self.x * other.getVec(0) + self.y * other.getVec(1) + self.z * other.getVec(2)
+        elif isinstance(other, Vector):
+            doNothingForNow = True
 
 class Matrix:
-    def __init__(self):
+    def __init__(self, shape, values = None):
+        self.table = []
+        self.shape = shape
+        for i in range(shape[0]):
+            self.table.append([])
+            for j in range(shape[1]):
+                x = 0
+                if values:
+                    x = values[i][j]
+                self.table.append(x)
+    def getVec(self, vecNumber):
+        ret = []
+        for i in range(self.shape[0]):
+            ret += self.table[i][vecNumber]
+        return ret
         
 
 Vector.up = Vector(0,0,1)

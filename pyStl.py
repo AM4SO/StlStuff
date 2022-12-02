@@ -151,6 +151,11 @@ class Vector:
         return Vector(self.x*scal, self.y*scal, self.z*scal)
     def __imul__(self, scal):
         return self.__mul__(scal)
+    def __truediv__(self, other):
+        if isinstance(other, Vector):
+            return Vector(self.x / other.x, self.y / other.y, self.z / other.z)
+        else:
+            return Vector(self.x / other, self.y / other, self.z / other)
     def __abs__(self):
         return (self.x**2+self.y**2+self.z**2)**0.5
     def __getitem__(self, index):
@@ -179,7 +184,7 @@ class Vector:
         return Vector(min(self.x, other.x), min(self.y,other.y), min(self.z, other.z))
     def rotatex(self, amount):
         if amount == 0:
-            return self + 0
+            return self*1
         test = '''
         for bounds 2,3,4:
         cross section when rotate around x:
@@ -200,7 +205,7 @@ class Vector:
                                          3  1  0  = -4 + 0    = -4
                                          
                                         x  0 -1  0     ax + by + 0z    
-                                        y  1  0  0  =  cx + dy + 0z: Ztrans= [[0,-1,0][1,0,0],[0,0,1]]
+                                        y  1  0  0  =  cx + dy + 0z: Ztrans= [[0,-1,0],[1,0,0],[0,0,1]]
                                         z  0  0  1     0x + 0y +  z
                                         
                                         Xtrans = [[1,0,0],[0,0,-1],[0,1,0]]
@@ -208,15 +213,30 @@ class Vector:
                                         y   0  0 -1  = -z
                                         z   0  1  0     y
         '''
+        if amount < 0:
+            amount = 4 + amount
         ## Apply transformation [[0, -1], [1, 0]] %amount% times
         transformationMat = Matrix((3,3), [[1,0,0],[0,0,-1],[0,1,0]])
+        ret = self*1
+        for i in range(amount):
+            ret = self.dot(transformationMat)
+        return ret
         
     def rotatez(self, amount):
-    
+        if amount == 0:
+            return self*1
+        elif amount < 0:
+            amount = amount + 4
+        transformationMat = Matrix((3,3), [[0,-1,0],[1,0,0],[0,0,1]])
+        ret = self*1
+        for i in range(amount):
+            ret = ret.dot(transformationMat)
+        return ret
+        
     def dot(self, other):
         if isinstance(other, Matrix):
-            if other.shape[1]: ##numColumns
-                return self.x * other.getVec(0) + self.y * other.getVec(1) + self.z * other.getVec(2)
+            if other.shape[1] == 3: ##numColumns
+                return (other.getVec(0) * self.x) + (other.getVec(1) * self.y) + (other.getVec(2) * self.z)
         elif isinstance(other, Vector):
             doNothingForNow = True
 
@@ -230,12 +250,12 @@ class Matrix:
                 x = 0
                 if values:
                     x = values[i][j]
-                self.table.append(x)
+                self.table[i].append(x)
     def getVec(self, vecNumber):
-        ret = []
-        for i in range(self.shape[0]):
-            ret += self.table[i][vecNumber]
-        return ret
+        #ret = []
+        #for i in range(self.shape[0]):
+        #    ret.append(self.table[i][vecNumber])
+        return Vector(self.table[0][vecNumber],self.table[1][vecNumber],self.table[2][vecNumber])
         
 
 Vector.up = Vector(0,0,1)

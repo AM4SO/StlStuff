@@ -72,7 +72,7 @@ class Blueprint:
         print("Initialised blueprint thingy")
         for part in self.blueprintObj:
             position = part["pos"] - self.minPos
-             bounds = Vector(1,1,1)
+            bounds = Vector(1,1,1)
             if part.get("bounds"):
                 bounds = part["bounds"]
             else: ## Correct orientation: xaxis: 2, zaxis:1
@@ -80,16 +80,24 @@ class Blueprint:
                 zaxis = part["zaxis"]
                 part["bounds"] = Vector(1,1,1) # Assume cube for now
                 #translate = Vector.zero -- No translate: Use rotate
-                part["bounds"] = part["bounds"].rotatex(xaxis - 2).rotatez(zaxis - 1)
+                part["bounds"] = (part["bounds"].rotatez(zaxis - 1)).rotatex(xaxis - 2)
                 #if not (xaxis == 2 and zaxis == 1):
-                    
+                bounds = part["bounds"]
+                x = bounds
+                position = position.minPerAxis(position+x)
+                bounds = Vector(1,1,1)
+                #print(position)#18 18 33
+                #print(bounds)
+                #print()
             endPos = position + bounds - Vector.ones
-                position += translate
-            for x in range(bounds.x):
-                for y in range(bounds.y):
-                    for z in range(bounds.z):
+            #position += translate
+            
+            #directions = bounds / bounds.positive()
+            for x in range(0,bounds.x, 1):
+                for y in range(0,bounds.y, 1):
+                    for z in range(0,bounds.z, 1):
                         self.blockArray[position.x+x][position.y+y][position.z+z] = "1"#part["shapeId"]
-        print3d(self.blockArray)
+        #print3d(self.blockArray)
         self.createModel()
         self.solid.save()
     

@@ -1,7 +1,0 @@
-{
-   "description" : "#{STEAM_WORKSHOP_NO_DESCRIPTION}",
-   "localId" : "eb87a187-ca70-4f35-92e2-6409ca61f913",
-   "name" : "Decoder with 16 bit register",
-   "type" : "Blueprint",
-   "version" : 0
-}

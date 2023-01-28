@@ -182,6 +182,8 @@ class Vector:
         return Vector(max(self.x, other.x), max(self.y,other.y), max(self.z, other.z))
     def minPerAxis(self, other):
         return Vector(min(self.x, other.x), min(self.y,other.y), min(self.z, other.z))
+    def round(self):
+        return Vector(round(self.x), round(self.y), round(self.z))
     def rotatex(self, amount):
         if amount == 0:
             return self*1
@@ -251,11 +253,22 @@ class Matrix:
                 if values:
                     x = values[i][j]
                 self.table[i].append(x)
+    def fillWithVecs(self, vectors):
+        for i in range(self.shape[1]):
+            for j in range(self.shape[0]):
+                self.table[i][j] = vectors[j][i]
     def getVec(self, vecNumber):
         #ret = []
         #for i in range(self.shape[0]):
         #    ret.append(self.table[i][vecNumber])
         return Vector(self.table[0][vecNumber],self.table[1][vecNumber],self.table[2][vecNumber])
+    def __str__(self):
+        ret = ""
+        for i in range(self.shape[0]):
+            ret += "\n"
+            for j in range(self.shape[1]):#shape[1] = number of vectors
+                ret += str(self.table[i][j]) + " "
+        return ret
         
 
 Vector.up = Vector(0,0,1)

@@ -1,4 +1,4 @@
-from pyStl import Vector, Solid, Triangle
+from pyStl import Vector, Solid, Triangle, Matrix
 from argparse import ArgumentParser
 import os
 import json
@@ -79,13 +79,13 @@ class Blueprint:
                 xaxis = part["xaxis"]
                 zaxis = part["zaxis"]
                 part["bounds"] = Vector(1,1,1) # Assume cube for now
-                #translate = Vector.zero -- No translate: Use rotate
-                part["bounds"] = (part["bounds"].rotatez(zaxis - 1)).rotatex(xaxis - 2)
-                #if not (xaxis == 2 and zaxis == 1):
                 bounds = part["bounds"]
-                x = bounds
-                position = position.minPerAxis(position+x)
-                bounds = Vector(1,1,1)
+                bounds = Blueprint.CorrectBounds(bounds, xaxis, zaxis).round()
+                ## Calculate the bounds when correct rotation. Some axis may have negative bounds
+                ## Use the new bounds to correct the start position (where each coordinate is minimised)
+                position = position.minPerAxis(position+bounds)
+                ## No longer have to use negative bounds in a loop, so we can make it positive
+                bounds = bounds.positive()
                 #print(position)#18 18 33
                 #print(bounds)
                 #print()
@@ -100,7 +100,16 @@ class Blueprint:
         #print3d(self.blockArray)
         self.createModel()
         self.solid.save()
-    
+    def CorrectBounds(bounds, xaxis, zaxis): #xaxis is a vector representing the direction
+        #the local xaxis of the body is pointing in global space.
+        # xaxis/abs(xaxis) = set magnitude to 1
+        xVec = Vector(xaxis*(abs(xaxis)==1)/abs(xaxis), xaxis*(abs(xaxis)==2)/abs(xaxis), xaxis*(abs(xaxis)==3)/abs(xaxis))
+        zVec = Vector(zaxis*(abs(zaxis)==1)/abs(zaxis), zaxis*(abs(zaxis)==2)/abs(zaxis), zaxis*(abs(zaxis)==3)/abs(zaxis))
+        yVec = zVec.cross(xVec)
+        trans = Matrix((3,3))
+        trans.fillWithVecs([xVec,yVec,zVec])
+        newBounds = bounds.dot(trans)
+        return newBounds
     def createModel(self):
         self.solid = Solid(self.name)
         blockArray = self.blockArray
